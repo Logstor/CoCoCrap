@@ -1,0 +1,9 @@
+
+
+
+DATA AST                WITH { String translate(Object ... params) }
+= Start(List<DataTypeDef> dataTypeDefs)     { return v; }
+| DataTypeDef(String dataTypeName, String functionHead, List<Alternative> alternatives) { }
+| Alternative(String constructor, List<Argument> arguments,  String code) { return params[2]; }
+| Argument(String type, String name) { }
+;

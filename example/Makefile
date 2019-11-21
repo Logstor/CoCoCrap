@@ -1,7 +1,8 @@
-ANTLRJAR = /usr/local/lib/antlr-4.7-complete.jar
+#ANTLRJAR = /usr/local/lib/antlr-4.7-complete.jar
+ANTLRJAR = java -Xmx500M -cp "/usr/local/lib/antlr-4.7.2-complete.jar:$$CLASSPATH" org.antlr.v4.Tool 
 
-export CLASSPATH := .:$(ANTLRJAR):${CLASSPATH}
-antlr4 = java -jar $(ANTLRJAR)
+#export CLASSPATH := .:$(ANTLRJAR):${CLASSPATH}
+antlr4 = java -Xmx500M -cp "/usr/local/lib/antlr-4.7.2-complete.jar:$$CLASSPATH" org.antlr.v4.Tool
 grun   = java org.antlr.v4.gui.TestRig
 
 SRCFILES = main.java
