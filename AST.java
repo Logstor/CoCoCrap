@@ -54,7 +54,10 @@ class DataTypeDef extends AST
     {
         StringBuilder sb = new StringBuilder();
 
+        sb.append( String.format("public abstract class %s extends AST\n{", dataTypeName) );
 
+        
+        sb.append("}");
 
         return sb.toString();
     }
