@@ -31,7 +31,7 @@ class Start extends AST {
         sb.append("abstract class AST{}\n");
 
         // Add all datatype definitions
-        for (DataTypeDef def : datatypedefs) { /*TODO: IMplement this! */}
+        for (DataTypeDef def : datatypedefs) { sb.append(def.translate()); }
 
         return sb.toString();
     }
@@ -54,7 +54,7 @@ class DataTypeDef extends AST
     {
         StringBuilder sb = new StringBuilder();
 
-        
+
 
         return sb.toString();
     }
