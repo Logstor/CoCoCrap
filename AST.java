@@ -63,7 +63,7 @@ class DataTypeDef extends AST
         StringBuilder sb = new StringBuilder();
 
         // Class header
-        sb.append( String.format("public abstract class %s extends AST\n{\n", dataTypeName) );
+        sb.append( String.format("abstract class %s extends AST\n{\n", dataTypeName) );
 
         // Function
         sb.append( String.format("%spublic abstract %s;\n", tab(1), functionHead) );
