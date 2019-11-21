@@ -1,0 +1,12 @@
+{
+  x=3;
+  y=10;
+  r=1;
+  while (x>0){
+    r=r*y/x;
+    y=y-1;
+    x=x-1;
+  }
+}
+
+r  // Expected result 120.0

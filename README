@@ -1,0 +1,51 @@
+Given files for the Assignment 2 of the compiler course.
+
+---
+
+The project is called "coco" (compiler-compiler) and it is a small
+compiler that can produce compilers.
+
+The input language of coco is defined in
+
+    coco.g4 (ANTLR syntax)
+
+Other files:
+
+AST.java   defines abstract syntax datastructures
+main.java  defines a visitor class that produces abstract syntax and then calls
+	   the translate() method of class Start in AST.java
+	   This method currently just returns an empty string, and in that case main just writes
+	   "This is where the output is supposed to be\n"
+	   onto the screen.
+Environment.java defines the Environment class as usual
+
+Of all these files, you ONLY NEED TO MODIFY AST.java:
+   implement a reasonable translate function for the different classes defined in AST
+
+Simple example:
+
+coco_input.txt	A simple input to the coco compiler
+coco_output_expected.java The java program that is supposed to result from it
+coco_output.java A file where a "make test" would store the output from running the coco compiler on "coco_input.txt"
+
+Suggested: first try to implement coco until coco_output.java and
+coco_output_expected.java are identical (up to whitespaces and the
+like) and the java compiler does not complain when compiling coco_output.java
+
+Finally, please try "make bigtest":
+
+This works in the folder "example" that contains the following files:
+
+interpreter.coco  -- an example of the interpreter we have done in assignment 1
+interpreter.java  -- the file that coco should produce from interpreter.coco ;
+		  as this gets overwritten by make bigtest, there is a copy in
+		  expected-interpreter.java
+Environment.java -- as usual
+interpreter.g4 	 -- the parser file (like in assignment 1)
+main.java        -- an implementation of the visitor class for interpreter that puts data structures into the AST classes of interpreter.java
+
+You MUST NOT MODIFY any files of example, except that your coco will generate interpreter.java.
+
+When all works, java translates the interpreter sources in the example
+folder and runs them on interpreter_input.txt, which is a small while
+program that should get to the result 120. 

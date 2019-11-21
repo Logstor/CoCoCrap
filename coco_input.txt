@@ -1,0 +1,8 @@
+// Example: Expressions Interpreter
+
+DATA expr           WITH { Double eval(Environment env) }
+= Constant(Double v)     { return v; }
+| Variable(String name)  { return env.getVariable(name); } 
+| Mult(expr e1, expr e2) { return e1.eval(env) * e2.eval(env); }
+| Add (expr e1, expr e2) { return e1.eval(env) + e2.eval(env); }
+;

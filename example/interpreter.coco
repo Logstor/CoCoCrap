@@ -1,0 +1,48 @@
+// Example: Interpreter
+
+DATA start           WITH { Double eval(Environment env) }
+= decl(block b, expr e)   { b.eval(env); return e.eval(env); }
+;
+
+DATA block   	     WITH { void eval(Environment env) }
+= Sequence(List<cmd> l)   { for(cmd c:l) c.eval(env); }
+;
+
+DATA cmd  	     WITH { void eval(Environment env) }
+= Assign(String x, expr e){ Double d=e.eval(env); env.setVariable(x,d); }
+| If(cond c, block b1, block b2) { if (c.eval(env)) b1.eval(env); else b2.eval(env); }
+| While(cond c, block b)  { while (c.eval(env)) b.eval(env); }
+;
+
+DATA cond            WITH { boolean eval(Environment env)}
+= Equals(expr e1, expr e2){ Double d1=e1.eval(env);
+                            Double d2=e2.eval(env);
+                            return d1.equals(d2); }
+| Greater(expr e1, expr e2){Double d1=e1.eval(env);
+                            Double d2=e2.eval(env);
+                            return d1>d2; }
+| Smaller(expr e1, expr e2){Double d1=e1.eval(env);
+                            Double d2=e2.eval(env);
+                            return d1<d2; }
+| GreaterEqual(expr e1, expr e2){ Double d1=e1.eval(env);
+                            Double d2=e2.eval(env);
+                            return d1>=d2; }
+| SmallerEqual(expr e1, expr e2){ Double d1=e1.eval(env);
+                            Double d2=e2.eval(env);
+                            return d1<=d2; }
+| Unequal(expr e1, expr e2){Double d1=e1.eval(env);
+                            Double d2=e2.eval(env);
+                            return d1!=d2; }
+| And(cond c1, cond c2)   { return c1.eval(env) && c2.eval(env); }
+| Or(cond c1, cond c2)    { return c1.eval(env) || c2.eval(env); }
+| Not(cond c)             { return !c.eval(env); }
+;
+
+DATA expr            WITH { Double eval(Environment env) }
+= Constant(Double v)      { return v; }
+| Variable(String name)   { return env.getVariable(name); } 
+| Mult(expr e1, expr e2)  { return e1.eval(env) * e2.eval(env); }
+| Div(expr e1, expr e2)   { return e1.eval(env) / e2.eval(env); }
+| Add(expr e1, expr e2)   { return e1.eval(env) + e2.eval(env); }
+| Sub(expr e1, expr e2)   { return e1.eval(env) - e2.eval(env); }
+;
