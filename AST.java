@@ -1,5 +1,8 @@
 /*
-* Original 
+* Original
+* Created by:
+* s160107 - Alfred Röttger Rydahl
+* s185097 - Rasmus Sander Larsen
 */
 
 import java.util.HashMap;
