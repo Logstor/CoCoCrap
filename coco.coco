@@ -23,7 +23,7 @@ DATA AST                WITH { String translate(String ... params) }
 
         // Function
         if ( functionHead.replace(" ", "").equals("") )
-            sb.append( String.format("\n%spublic abstract %s;\n", tab(1), functionHead) );
+            sb.append( String.format("\n%spublic abstract %s;\n", "    ", functionHead) );
         sb.append("};\n");
 
         for (Alternative alt : alternatives) 
@@ -42,29 +42,29 @@ DATA AST                WITH { String translate(String ... params) }
         sb.append( String.format("class %s extends %s\n{\n",constructor, params[0]) );
 
         // Class fields
-        for (Argument arg : arguments) { sb.append( String.format("%s%s %s;\n", tab(1), arg.type, arg.name) ); }
+        for (Argument arg : arguments) { sb.append( String.format("%s%s %s;\n", "    ", arg.type, arg.name) ); }
 
         // Constructor
         int argLength = arguments.size();
-        sb.append( String.format("%s%s(", tab(1), constructor) );
+        sb.append( String.format("%s%s(", "    ", constructor) );
 
         for (int i=0; i<argLength; i++)
         {
-            sb.append(arguments.get(i).toString());
+            sb.append(arguments.get(i).translate());
 
             if (i != argLength-1)
                 sb.append(", ");
         }
 
-        sb.append( String.format(")\n%s{\n", tab(1)) );
+        sb.append( String.format(")\n%s{\n", "    ") );
 
         for (Argument arg : arguments)
-        { sb.append( String.format("%sthis.%s = %s;\n", tab(2), arg.name, arg.name) ); }
+        { sb.append( String.format("%sthis.%s = %s;\n", "        ", arg.name, arg.name) ); }
 
-        sb.append( String.format("%s}\n", tab(1)) );
+        sb.append( String.format("%s}\n", "    ") );
 
         // Function
-        sb.append(String.format("%spublic %s %s\n",tab(1), params[1], code));
+        sb.append(String.format("%spublic %s %s\n","    ", params[1], code));
 
         // Ending bracket
         sb.append("}\n");
