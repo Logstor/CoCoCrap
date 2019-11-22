@@ -1,7 +1,7 @@
 
 
 
-DATA AST                WITH { String translate(String ... params) }
+DATA Expr                WITH { String translate(String ... params) }
 
 = Start(List<DataTypeDef> dataTypeDefs)     { 
         StringBuilder sb = new StringBuilder();
@@ -11,7 +11,7 @@ DATA AST                WITH { String translate(String ... params) }
         sb.append("abstract class AST{}\n\n");
 
         // Add all datatype definitions
-        for (DataTypeDef def : datatypedefs) { sb.append(def.translate()); }
+        for (DataTypeDef def : dataTypeDefs) { sb.append(def.translate()); }
 
         return sb.toString(); }
 

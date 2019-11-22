@@ -1,37 +1,22 @@
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.List;
-import java.util.ArrayList;
+/*
+* Generated
+*/
 
-class faux{ // collection of non-OO auxiliary functions (currently just error)
-    public static void error(String msg) 
+import java.util.*;
+
+abstract class AST{}
+
+abstract class Expr extends AST
+{};
+
+class Start extends Expr
+{
+    List<DataTypeDef> dataTypeDefs;
+    Start(List<DataTypeDef> dataTypeDefs)
     {
-        System.err.println("Interpreter error: "+msg);
-        System.exit(-1);
+        this.dataTypeDefs = dataTypeDefs;
     }
-}
-
-abstract class AST 
-{ 
-    String tab(int noOfTabs){
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i<noOfTabs; i++){
-            sb.append("    ");
-        }
-        return sb.toString();
-    }
-}
-
-class Start extends AST {
-
-    public List<DataTypeDef> datatypedefs;
-
-    Start(List<DataTypeDef> datatypedefs) {
-	    this.datatypedefs=datatypedefs;
-    }
-
-    public String translate()
-    {
+    public  String translate(String ... params)  { 
         StringBuilder sb = new StringBuilder();
 
         // Header
@@ -39,27 +24,24 @@ class Start extends AST {
         sb.append("abstract class AST{}\n\n");
 
         // Add all datatype definitions
-        for (DataTypeDef def : datatypedefs) { sb.append(def.translate()); }
+        for (DataTypeDef def : dataTypeDefs) { sb.append(def.translate()); }
 
-        return sb.toString();
-    }
+        return sb.toString(); }
 }
 
-class DataTypeDef extends AST 
-{
-    public String dataTypeName;
-    public String functionHead;
-    public List<Alternative> alternatives;
 
+class DataTypeDef extends Expr
+{
+    String dataTypeName;
+    String functionHead;
+    List<Alternative> alternatives;
     DataTypeDef(String dataTypeName, String functionHead, List<Alternative> alternatives)
     {
-        this.dataTypeName=dataTypeName;
-        this.functionHead=functionHead;
-        this.alternatives=alternatives;
+        this.dataTypeName = dataTypeName;
+        this.functionHead = functionHead;
+        this.alternatives = alternatives;
     }
-
-    public String translate()
-    {
+    public  String translate(String ... params)  {
         StringBuilder sb = new StringBuilder();
 
         // Class header
@@ -67,7 +49,7 @@ class DataTypeDef extends AST
 
         // Function
         if ( functionHead.replace(" ", "").equals("") )
-            sb.append( String.format("\n%spublic abstract %s;\n", tab(1), functionHead) );
+            sb.append( String.format("\n%spublic abstract %s;\n", "    ", functionHead) );
         sb.append("};\n");
 
         for (Alternative alt : alternatives) 
@@ -77,76 +59,70 @@ class DataTypeDef extends AST
             sb.append("\n");
         }
 
-        return sb.toString();
-    }
-
+        return sb.toString(); }
 }
 
-class Alternative extends AST 
-{
-    public String constructor;
-    public List<Argument> arguments;
-    public String code;
-    
-    Alternative(String constructor, List<Argument> arguments,  String code)
-    {
-        this.constructor=constructor;
-        this.arguments=arguments;
-        this.code=code;
-    }
 
-    public String translate(String dataTypeDef, String functionHead)
+class Alternative extends Expr
+{
+    String constructor;
+    List<Argument> arguments;
+    String code;
+    Alternative(String constructor, List<Argument> arguments, String code)
     {
+        this.constructor = constructor;
+        this.arguments = arguments;
+        this.code = code;
+    }
+    public  String translate(String ... params)  { 
         StringBuilder sb = new StringBuilder();
 
         // Class header
-        sb.append( String.format("class %s extends %s\n{\n",constructor, dataTypeDef) );
+        sb.append( String.format("class %s extends %s\n{\n",constructor, params[0]) );
 
         // Class fields
-        for (Argument arg : arguments) { sb.append( String.format("%s%s %s;\n", tab(1), arg.type, arg.name) ); }
+        for (Argument arg : arguments) { sb.append( String.format("%s%s %s;\n", "    ", arg.type, arg.name) ); }
 
         // Constructor
         int argLength = arguments.size();
-        sb.append( String.format("%s%s(", tab(1), constructor) );
+        sb.append( String.format("%s%s(", "    ", constructor) );
 
         for (int i=0; i<argLength; i++)
         {
-            sb.append(arguments.get(i).toString());
+            sb.append(arguments.get(i).translate());
 
             if (i != argLength-1)
                 sb.append(", ");
         }
 
-        sb.append( String.format(")\n%s{\n", tab(1)) );
+        sb.append( String.format(")\n%s{\n", "    ") );
 
         for (Argument arg : arguments)
-        { sb.append( String.format("%sthis.%s = %s;\n", tab(2), arg.name, arg.name) ); }
+        { sb.append( String.format("%sthis.%s = %s;\n", "        ", arg.name, arg.name) ); }
 
-        sb.append( String.format("%s}\n", tab(1)) );
+        sb.append( String.format("%s}\n", "    ") );
 
         // Function
-        sb.append(String.format("%spublic %s %s\n",tab(1),functionHead,code));
-
-        // TODO: FJERN!
-        //System.out.println(String.format("Constructor: %s\nCode: %s\nDataTypeDef: %s\nFunctionHead: %s", constructor, code, dataTypeDef, functionHead));
-        //for (Argument arg : arguments) { System.out.println(String.format("Type: %s\nName: %s\n\n", arg.type, arg.name)); }
-        // 
+        sb.append(String.format("%spublic %s %s\n","    ", params[1], code));
 
         // Ending bracket
         sb.append("}\n");
 
         return sb.toString(); 
-    }
+}
 }
 
-class Argument extends AST 
+
+class Argument extends Expr
 {
-    public String type;
-    public String name;
-    Argument(String type, String name) { this.type=type; this.name=name; }
-
-    @Override
-    public String toString() {
-        return String.format("%s %s", type, name);
+    String type;
+    String name;
+    Argument(String type, String name)
+    {
+        this.type = type;
+        this.name = name;
     }
+    public  String translate(String ... params)  { return String.format("%s %s", type, name); }
 }
+
+
