@@ -63,10 +63,11 @@ class DataTypeDef extends AST
         StringBuilder sb = new StringBuilder();
 
         // Class header
-        sb.append( String.format("abstract class %s extends AST\n{\n", dataTypeName) );
+        sb.append( String.format("abstract class %s extends AST\n{", dataTypeName) );
 
         // Function
-        sb.append( String.format("%spublic abstract %s;\n", tab(1), functionHead) );
+        if ( functionHead.replace(" ", "").equals("") )
+            sb.append( String.format("\n%spublic abstract %s;\n", tab(1), functionHead) );
         sb.append("};\n");
 
         for (Alternative alt : alternatives) 
@@ -123,6 +124,7 @@ class Alternative extends AST
 
         sb.append( String.format("%s}\n", tab(1)) );
 
+        // Function
         sb.append(String.format("%spublic %s %s\n",tab(1),functionHead,code));
 
         // TODO: FJERN!
