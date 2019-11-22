@@ -1,7 +1,7 @@
 
 
 
-DATA AST                WITH { String translate(Object ... params) }
+DATA AST                WITH { String translate(String ... params) }
 
 = Start(List<DataTypeDef> dataTypeDefs)     { 
         StringBuilder sb = new StringBuilder();
@@ -35,6 +35,42 @@ DATA AST                WITH { String translate(Object ... params) }
 
         return sb.toString(); }
 
-| Alternative(String constructor, List<Argument> arguments,  String code) { return params[2]; }
-| Argument(String type, String name) { }
+| Alternative(String constructor, List<Argument> arguments,  String code) { 
+        StringBuilder sb = new StringBuilder();
+
+        // Class header
+        sb.append( String.format("class %s extends %s\n{\n",constructor, params[0]) );
+
+        // Class fields
+        for (Argument arg : arguments) { sb.append( String.format("%s%s %s;\n", tab(1), arg.type, arg.name) ); }
+
+        // Constructor
+        int argLength = arguments.size();
+        sb.append( String.format("%s%s(", tab(1), constructor) );
+
+        for (int i=0; i<argLength; i++)
+        {
+            sb.append(arguments.get(i).toString());
+
+            if (i != argLength-1)
+                sb.append(", ");
+        }
+
+        sb.append( String.format(")\n%s{\n", tab(1)) );
+
+        for (Argument arg : arguments)
+        { sb.append( String.format("%sthis.%s = %s;\n", tab(2), arg.name, arg.name) ); }
+
+        sb.append( String.format("%s}\n", tab(1)) );
+
+        // Function
+        sb.append(String.format("%spublic %s %s\n",tab(1), params[1], code));
+
+        // Ending bracket
+        sb.append("}\n");
+
+        return sb.toString(); 
+}
+
+| Argument(String type, String name) { return String.format("%s %s", type, name); }
 ;
