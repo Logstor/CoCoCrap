@@ -19,4 +19,15 @@ argument  : type=ID name=ID ;
 ID	   : ('A'..'Z'|'a'..'z'|'_')('A'..'Z'|'a'..'z'|'_'|'0'..'9'|'<'|'>')* ;
 WHITESPACE : [ \n\t\r]+ -> skip;
 COMMENT    : '//'(~[\n])* -> skip;
-JAVACODE   : '{' ~[{}]* '}';  // allowing no further braces in code.
+//JAVACODE   : '{' ~[{}]* '}';  // allowing no further braces in code.
+
+JAVACODE   : '{' (  ~[{}]
+                 | '{' ( ~[{}]
+                       | '{' ( ~[{}]
+                             | '{' ~[{}]* '}'
+                             )*
+                         '}'
+                       )*
+                   '}'
+                 )*
+             '}';  // allowing three levels of braces within the JAVA code
