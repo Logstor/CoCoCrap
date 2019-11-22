@@ -134,11 +134,6 @@ class Alternative extends AST
         // Function
         sb.append(String.format("%spublic %s %s\n",tab(1),functionHead,code));
 
-        // TODO: FJERN!
-        //System.out.println(String.format("Constructor: %s\nCode: %s\nDataTypeDef: %s\nFunctionHead: %s", constructor, code, dataTypeDef, functionHead));
-        //for (Argument arg : arguments) { System.out.println(String.format("Type: %s\nName: %s\n\n", arg.type, arg.name)); }
-        // 
-
         // Ending bracket
         sb.append("}\n");
 
